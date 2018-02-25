@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
   <title>Red/Blue Dichoptic Tetris</title>
@@ -64,9 +64,9 @@
     @media screen and (min-width: 800px) and (min-height: 800px)  { #tetris { font-size: 2.00em; width: 750px; } #menu { width: 350px; height: 680px; } #upcoming { width: 175px; height: 175px; } #canvas { width: 350px; height: 680px; } } /* 35px chunks */
     @media screen and (min-width: 900px) and (min-height: 900px)  { #tetris { font-size: 2.25em; width: 850px; } #menu { width: 400px; height: 780px; } #upcoming { width: 200px; height: 200px; } #canvas { width: 400px; height: 780px; } } /* 40px chunks */
   </style>
-</head> 
+</head>
 
-<body> 
+<body>
 
   <div id="tetris">
     <div id="menu">
@@ -75,10 +75,11 @@
       <p><canvas id="upcoming"></canvas></p>
       <p>score <span id="score">00000</span></p>
       <p>rows <span id="rows">0</span></p>
-
-      <div id="flip-button">
+      <p>set color <input id="set-color" type="color" value="#ff0000"></p>
+      <p>falling color <input id="falling-color" type="color" value="#ff0000"></p>
+      <!--div id="flip-button">
         <a>Flip Colors ⇄</a>
-      </div>
+      </div-->
     </div>
     <canvas id="canvas">
       Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
@@ -114,10 +115,10 @@
     function randomChoice(choices) { return choices[Math.round(random(0, choices.length-1))]; }
 
     if (!window.requestAnimationFrame) { // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-      window.requestAnimationFrame = window.webkitRequestAnimationFrame || 
-                                     window.mozRequestAnimationFrame    || 
-                                     window.oRequestAnimationFrame      || 
-                                     window.msRequestAnimationFrame     || 
+      window.requestAnimationFrame = window.webkitRequestAnimationFrame ||
+                                     window.mozRequestAnimationFrame    ||
+                                     window.oRequestAnimationFrame      ||
+                                     window.msRequestAnimationFrame     ||
                                      function(callback, element) {
                                        window.setTimeout(callback, 40); // 24 fps
                                      }
@@ -171,8 +172,8 @@
     //-------------------------------------------------------------------------
 
     var blockColors = {
-      set: "hsl(0, 43%, 81%)",
-      falling: "hsl(300, 14%, 26%)"
+      set: "#E3BABA",
+      falling: "#2C1037"
     };
 
     var types = [
@@ -236,6 +237,9 @@
 
     function run() {
 
+      document.getElementById('set-color').value = blockColors.set;
+      document.getElementById('falling-color').value = blockColors.falling;
+
       addEvents(); // attach keydown and resize events
 
       var last = now = timestamp();
@@ -257,7 +261,11 @@
       document.addEventListener('keydown', keydown, false);
       window.addEventListener('resize', resize, false);
 
-      get("flip-button").addEventListener('click', flipColors, false);
+      //get("flip-button").addEventListener('click', flipColors, false);
+      get("set-color").addEventListener("input", updateSet, false);
+      get("set-color").addEventListener("change", updateSet, false);
+      get("falling-color").addEventListener("input", updateFalling, false);
+      get("falling-color").addEventListener("change", updateFalling, false);
     }
 
     function resize(event) {
@@ -334,7 +342,7 @@
         if (dt > step) {
           dt = dt - step;
           drop();
-        } 
+        }
       }
     }
 
@@ -508,6 +516,13 @@
       blockColors.falling = setColor;
     }
 
+    function updateSet(event) {
+      blockColors.set = event.target.value;
+    }
+
+    function updateFalling(event) {
+      blockColors.falling = event.target.value;
+    }
     //-------------------------------------------------------------------------
     // FINALLY, lets run the game
     //-------------------------------------------------------------------------
@@ -516,5 +531,5 @@
 
   </script>
 
-</body> 
+</body>
 </html>
